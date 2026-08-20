@@ -1,0 +1,3728 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadForge - Lead Generator</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f5f7fb;
+            --card: #fff;
+            --border: #e5e7eb;
+            --text: #172033;
+            --muted: #7b8496;
+            --primary: #635bff;
+            --primary-dark: #5048e5;
+            --soft-primary: #f0efff;
+            --success: #16a34a;
+            --danger: #dc2626;
+        }
+
+        body {
+            font-family: Inter, Arial, Helvetica, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        button,
+        input,
+        select {
+            font-family: inherit;
+        }
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            width: 245px;
+            background: #111827;
+            color: #fff;
+            padding: 24px 16px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 20;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 0 10px 30px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 11px;
+            background: linear-gradient(135deg, #7c73ff, #635bff);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .logo-text span {
+            color: #8b84ff;
+        }
+
+        .nav-label {
+            color: #697386;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 700;
+            padding: 0 12px;
+            margin: 10px 0;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            border-radius: 9px;
+            color: #aeb6c5;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+        }
+
+        .nav-item:hover,
+        .nav-item.active {
+            background: #1f2937;
+            color: #fff;
+        }
+
+        .nav-item.active {
+            box-shadow: inset 3px 0 0 #7c73ff;
+        }
+
+        .nav-icon {
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-bottom {
+            position: absolute;
+            left: 16px;
+            right: 16px;
+            bottom: 20px;
+        }
+
+        .credits-mini {
+            background: #1c2433;
+            border: 1px solid #293345;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+
+        .credits-mini-title {
+            color: #8e99aa;
+            font-size: 11px;
+            margin-bottom: 5px;
+        }
+
+        .credits-mini-value {
+            font-size: 22px;
+            font-weight: 800;
+        }
+
+        .credits-mini-bar {
+            height: 5px;
+            background: #303a4b;
+            border-radius: 10px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .credits-mini-bar span {
+            display: block;
+            width: 72%;
+            height: 100%;
+            background: #7c73ff;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 245px;
+            width: calc(100% - 245px);
+            min-height: 100vh;
+        }
+
+        .topbar {
+            height: 72px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 32px;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .page-subtitle {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .credit-pill {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 9px 13px;
+            border-radius: 9px;
+            background: #f8f7ff;
+            border: 1px solid #e4e1ff;
+            color: #4d46ce;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #e9e7ff;
+            color: #554ee3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 13px;
+        }
+
+        .content {
+            padding: 30px 32px 50px;
+            max-width: 1500px;
+        }
+
+        .section-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(20, 30, 50, .025);
+        }
+
+        .card-header {
+            padding: 21px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 750;
+        }
+
+        .card-description {
+            color: var(--muted);
+            font-size: 12px;
+            margin-top: 4px;
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .step-number {
+            width: 25px;
+            height: 25px;
+            border-radius: 7px;
+            background: var(--soft-primary);
+            color: var(--primary);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            margin-right: 8px;
+        }
+
+        /* PLATFORM */
+
+        .platform-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+        }
+
+        .platform-option {
+            position: relative;
+        }
+
+        .platform-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .platform-option label {
+            min-height: 78px;
+            border: 1px solid var(--border);
+            border-radius: 11px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            cursor: pointer;
+            transition: .18s;
+            background: #fff;
+            font-size: 11px;
+            font-weight: 650;
+            color: #566071;
+        }
+
+        .platform-option label:hover {
+            border-color: #bdb8ff;
+            background: #fafaff;
+        }
+
+        .platform-option input:checked+label {
+            border-color: var(--primary);
+            background: var(--soft-primary);
+            color: #4d46d4;
+            box-shadow: 0 0 0 2px rgba(99, 91, 255, .08);
+        }
+
+        .platform-logo {
+            width: 29px;
+            height: 29px;
+            border-radius: 8px;
+            background: #f1f3f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .platform-option input:checked+label .platform-logo {
+            background: #fff;
+        }
+
+        .selected-count {
+            color: var(--primary);
+            background: var(--soft-primary);
+            padding: 5px 9px;
+            border-radius: 7px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* FORM */
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            min-width: 0;
+        }
+
+        .form-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #394255;
+        }
+
+        .optional {
+            font-size: 10px;
+            font-weight: 500;
+            color: #9aa2b1;
+        }
+
+        .input,
+        .select {
+            width: 100%;
+            height: 45px;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            padding: 0 13px;
+            outline: none;
+            color: var(--text);
+            background: #fff;
+            font-size: 13px;
+            transition: .18s;
+        }
+
+        .input:focus,
+        .select:focus {
+            border-color: #8d87ff;
+            box-shadow: 0 0 0 3px rgba(99, 91, 255, .08);
+        }
+
+        .input::placeholder {
+            color: #a8afbc;
+        }
+
+        /* QUANTITY */
+
+        .quantity-wrap {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .quantity-main {
+            flex: 1;
+        }
+
+        .quantity-value {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .quantity-number {
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .quantity-credits {
+            color: #6a7180;
+            font-size: 12px;
+        }
+
+        .quantity-credits strong {
+            color: var(--primary);
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: var(--primary);
+            cursor: pointer;
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 10px;
+            color: #a0a7b4;
+            margin-top: 7px;
+        }
+
+        .credit-box {
+            width: 245px;
+            padding: 16px;
+            border-radius: 11px;
+            background: #f8f8ff;
+            border: 1px solid #e4e2ff;
+        }
+
+        .credit-box-top {
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #777f90;
+        }
+
+        .credit-box-value {
+            font-size: 21px;
+            font-weight: 800;
+            color: #5149df;
+            margin-top: 5px;
+        }
+
+        .credit-box small {
+            display: block;
+            color: #969dad;
+            font-size: 10px;
+            margin-top: 3px;
+        }
+
+        /* CHECKBOXES */
+
+        .field-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 9px;
+        }
+
+        .check-item {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 12px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-size: 11px;
+            color: #596273;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .check-item input {
+            accent-color: var(--primary);
+        }
+
+        /* SWITCH */
+
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 15px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .switch-title {
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .switch-description {
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .switch {
+            position: relative;
+            width: 39px;
+            height: 21px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            inset: 0;
+            background: #d7dbe3;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: .2s;
+        }
+
+        .slider:before {
+            content: "";
+            position: absolute;
+            width: 15px;
+            height: 15px;
+            left: 3px;
+            top: 3px;
+            border-radius: 50%;
+            background: #fff;
+            transition: .2s;
+        }
+
+        .switch input:checked+.slider {
+            background: var(--primary);
+        }
+
+        .switch input:checked+.slider:before {
+            transform: translateX(18px);
+        }
+
+        /* ACTION */
+
+        .action-bar {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            padding: 18px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .action-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .action-icon {
+            width: 39px;
+            height: 39px;
+            border-radius: 10px;
+            background: #f0efff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .action-info strong {
+            display: block;
+            font-size: 12px;
+        }
+
+        .action-info span {
+            display: block;
+            font-size: 10px;
+            color: var(--muted);
+            margin-top: 3px;
+        }
+
+        .generate-btn {
+            height: 45px;
+            padding: 0 24px;
+            border: 0;
+            border-radius: 9px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(99, 91, 255, .22);
+        }
+
+        .generate-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .generate-btn:disabled {
+            opacity: .6;
+            cursor: not-allowed;
+        }
+
+        /* PROGRESS */
+
+        .progress-card {
+            display: none;
+        }
+
+        .progress-card.show {
+            display: block;
+        }
+
+        .progress-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .progress-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #f59e0b;
+            animation: pulse 1.2s infinite;
+        }
+
+        @keyframes pulse {
+            50% {
+                opacity: .35;
+            }
+        }
+
+        .status-dot.completed {
+            background: var(--success);
+            animation: none;
+        }
+
+        .status-dot.error {
+            background: var(--danger);
+            animation: none;
+        }
+
+        .progress-percent {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--primary);
+        }
+
+        .progress-track {
+            height: 8px;
+            border-radius: 10px;
+            background: #eceef3;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #635bff, #8a84ff);
+            border-radius: 10px;
+            transition: width .5s ease;
+        }
+
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 9px;
+            font-size: 10px;
+            color: var(--muted);
+        }
+
+        /* RESULTS */
+
+        .results-card {
+            display: none;
+        }
+
+        .results-card.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .result-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .result-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 9px;
+            background: #ecfdf3;
+            color: #168345;
+            border-radius: 7px;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .download-btn {
+            height: 37px;
+            padding: 0 13px;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #475164;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .download-btn:hover {
+            border-color: #aaa5ff;
+            color: var(--primary);
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1050px;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 18px;
+            background: #fafbfc;
+            border-bottom: 1px solid var(--border);
+            color: #8a92a0;
+            font-size: 10px;
+            font-weight: 750;
+            text-transform: uppercase;
+            letter-spacing: .4px;
+        }
+
+        td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #f0f1f4;
+            font-size: 11px;
+            color: #505a6c;
+        }
+
+        td:first-child {
+            color: #252d3d;
+            font-weight: 700;
+        }
+
+        td a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        td a:hover {
+            text-decoration: underline;
+        }
+
+        .table-status {
+            padding: 4px 7px;
+            border-radius: 5px;
+            background: #ecfdf3;
+            color: #168345;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 7px;
+            background: #fff7ed;
+            color: #c2410c;
+            border-radius: 6px;
+            font-size: 9px;
+            font-weight: 700;
+        }
+
+        .live-badge span {
+            width: 5px;
+            height: 5px;
+            background: #f97316;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+
+        /* EMPTY */
+
+        .empty-results {
+            padding: 45px 20px;
+            text-align: center;
+            color: #9aa2b1;
+            font-size: 12px;
+        }
+
+        /* TOAST */
+
+        .toast {
+            position: fixed;
+            right: 25px;
+            bottom: 25px;
+            background: #172033;
+            color: #fff;
+            padding: 13px 17px;
+            border-radius: 9px;
+            font-size: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+            transform: translateY(100px);
+            opacity: 0;
+            pointer-events: none;
+            transition: .3s;
+            z-index: 100;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .mobile-menu {
+            display: none;
+        }
+
+        @media(max-width:1200px) {
+
+            .platform-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media(max-width:850px) {
+
+            .sidebar {
+                transform: translateX(-100%);
+                transition: .25s;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+
+            .mobile-menu {
+                display: flex;
+                width: 36px;
+                height: 36px;
+                border: 1px solid var(--border);
+                background: #fff;
+                border-radius: 8px;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                margin-right: 10px;
+            }
+
+            .topbar {
+                padding: 0 18px;
+            }
+
+            .content {
+                padding: 20px 18px 40px;
+            }
+
+            .platform-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .quantity-wrap {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .credit-box {
+                width: 100%;
+            }
+        }
+
+        @media(max-width:600px) {
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .platform-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .action-bar {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 15px;
+            }
+
+            .generate-btn {
+                justify-content: center;
+            }
+
+            .credit-pill {
+                display: none;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .results-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        /*
+        ==============================================================
+                            LOGIN GUARD
+        ==============================================================
+        This page requires a successful login from login.html.
+        Credentials themselves are NOT hardcoded in this file.
+        The Basic Auth token is kept only in sessionStorage, so it is
+        cleared when the browser session/tab is closed.
+        ==============================================================
+        */
+        (function () {
+            const authToken = sessionStorage.getItem("leadforge_auth");
+
+            if (!authToken) {
+                window.location.replace("./login.html");
+            }
+        })();
+    </script>
+
+
+    <div class="app">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="logo">
+                <div class="logo-icon">L</div>
+                <div class="logo-text">Lead<span>Forge</span></div>
+            </div>
+
+            <div class="nav-label">Workspace</div>
+
+            <div class="nav">
+
+                <div class="nav-item active">
+                    <div class="nav-icon">⌁</div>
+                    Lead Generator
+                </div>
+
+                <div class="nav-item">
+                    <div class="nav-icon">◷</div>
+                    My Searches
+                </div>
+
+                <div class="nav-item">
+                    <div class="nav-icon">↓</div>
+                    Downloads
+                </div>
+
+            </div>
+
+            <div class="nav-label" style="margin-top:25px;">
+                Account
+            </div>
+
+            <div class="nav">
+
+                <div class="nav-item">
+                    <div class="nav-icon">◉</div>
+                    Credits
+                </div>
+
+                <div class="nav-item">
+                    <div class="nav-icon">⚙</div>
+                    Settings
+                </div>
+
+            </div>
+
+            <div class="sidebar-bottom">
+
+                <div class="credits-mini">
+
+                    <div class="credits-mini-title">
+                        AVAILABLE CREDITS
+                    </div>
+
+                    <div class="credits-mini-value" id="sidebarCredits">
+                        420
+                    </div>
+
+                    <div class="credits-mini-bar">
+                        <span></span>
+                    </div>
+
+                </div>
+
+                <div class="nav-item">
+                    <div class="nav-icon">?</div>
+                    Help & Support
+                </div>
+
+                <div class="nav-item" onclick="logoutLeadForge()" style="margin-top:6px;">
+                    <div class="nav-icon">↪</div>
+                    Logout
+                </div>
+
+            </div>
+
+        </aside>
+
+
+        <!-- MAIN -->
+        <main class="main">
+
+            <header class="topbar">
+
+                <div style="display:flex;align-items:center;">
+
+                    <button class="mobile-menu" onclick="toggleSidebar()">
+                        ☰
+                    </button>
+
+                    <div>
+
+                        <div class="page-title">
+                            Lead Generator
+                        </div>
+
+                        <div class="page-subtitle">
+                            Find targeted business leads from multiple sources
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <div class="top-actions">
+
+                    <div class="credit-pill">
+                        ✦
+                        <span id="topCredits">
+                            420 Credits
+                        </span>
+                    </div>
+
+                    <div class="avatar">
+                        HA
+                    </div>
+
+                </div>
+
+            </header>
+
+
+            <div class="content">
+
+
+                <!-- SOURCES -->
+                <section class="section-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                <span class="step-number">1</span>
+                                Select Sources
+                            </div>
+
+                            <div class="card-description">
+                                Choose where you want to find your leads
+                            </div>
+
+                        </div>
+
+                        <div class="selected-count" id="selectedCount">
+                            0 Selected
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="platform-grid">
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="google" value="google">
+                                <label for="google">
+                                    <div class="platform-logo">G</div>
+                                    Google
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="maps" value="google_maps">
+                                <label for="maps">
+                                    <div class="platform-logo">M</div>
+                                    Google Maps
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="linkedin" value="linkedin">
+                                <label for="linkedin">
+                                    <div class="platform-logo">in</div>
+                                    LinkedIn
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="facebook" value="facebook">
+                                <label for="facebook">
+                                    <div class="platform-logo">f</div>
+                                    Facebook
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="instagram" value="instagram">
+                                <label for="instagram">
+                                    <div class="platform-logo">◎</div>
+                                    Instagram
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="twitter" value="twitter">
+                                <label for="twitter">
+                                    <div class="platform-logo">𝕏</div>
+                                    X / Twitter
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="pinterest" value="pinterest">
+                                <label for="pinterest">
+                                    <div class="platform-logo">P</div>
+                                    Pinterest
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="quora" value="quora">
+                                <label for="quora">
+                                    <div class="platform-logo">Q</div>
+                                    Quora
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="yelp" value="yelp">
+                                <label for="yelp">
+                                    <div class="platform-logo">Y</div>
+                                    Yelp
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="yellowpages" value="yellow_pages">
+                                <label for="yellowpages">
+                                    <div class="platform-logo">YP</div>
+                                    Yellow Pages
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="youtube" value="youtube">
+                                <label for="youtube">
+                                    <div class="platform-logo">▶</div>
+                                    YouTube
+                                </label>
+                            </div>
+
+                            <div class="platform-option">
+                                <input type="checkbox" id="directories" value="directories">
+                                <label for="directories">
+                                    <div class="platform-logo">D</div>
+                                    Directories
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- TARGET -->
+                <section class="section-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                <span class="step-number">2</span>
+                                Define Your Target
+                            </div>
+
+                            <div class="card-description">
+                                Tell us exactly which businesses you want to find
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="form-grid">
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Country
+                                </label>
+
+                                <select class="select" id="country">
+
+                                    <option value="">
+                                        Select Country
+                                    </option>
+
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>United Kingdom</option>
+                                    <option>Australia</option>
+                                    <option>Pakistan</option>
+                                    <option>Germany</option>
+                                    <option>France</option>
+                                    <option>United Arab Emirates</option>
+                                    <option>Saudi Arabia</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    State / Province
+                                </label>
+
+                                <select class="select" id="state">
+
+                                    <option value="">
+                                        Select State
+                                    </option>
+
+                                    <option>Texas</option>
+                                    <option>California</option>
+                                    <option>Florida</option>
+                                    <option>New York</option>
+                                    <option>New Jersey</option>
+                                    <option>Arizona</option>
+                                    <option>Illinois</option>
+                                    <option>Washington</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    City
+                                    <span class="optional">Optional</span>
+                                </label>
+
+                                <input class="input" id="city" placeholder="e.g. Houston">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Business Niche
+                                </label>
+
+                                <select class="select" id="niche">
+
+                                    <option value="">
+                                        Select Business Niche
+                                    </option>
+
+                                    <option>Catering Business</option>
+                                    <option>Cleaning Service</option>
+                                    <option>Restaurant</option>
+                                    <option>Dentist</option>
+                                    <option>Law Firm</option>
+                                    <option>Roofing Company</option>
+                                    <option>Plumbing Company</option>
+                                    <option>HVAC Company</option>
+                                    <option>Electrician</option>
+                                    <option>Marketing Agency</option>
+                                    <option>Software Company</option>
+                                    <option>IT Services</option>
+                                    <option>Construction Company</option>
+                                    <option>Real Estate Agency</option>
+                                    <option>Insurance Agency</option>
+                                    <option>Gym / Fitness</option>
+                                    <option>Beauty Salon</option>
+                                    <option>Hotel</option>
+                                    <option>Travel Agency</option>
+                                    <option>Auto Dealer</option>
+                                    <option>Medical Clinic</option>
+                                    <option>Consulting Company</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Search Keyword
+                                    <span class="optional">Optional</span>
+                                </label>
+
+                                <input class="input" id="keyword" placeholder="e.g. Wedding Catering">
+
+                            </div>
+
+
+                            <div class="form-group">
+
+                                <label class="form-label">
+                                    Postal / ZIP Code
+                                    <span class="optional">Optional</span>
+                                </label>
+
+                                <input class="input" id="postal" placeholder="e.g. 77001">
+
+                            </div>
+
+
+                        </div>
+                    </div>
+                </section>
+
+
+                <!-- QUANTITY -->
+                <section class="section-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                <span class="step-number">3</span>
+                                Lead Quantity
+                            </div>
+
+                            <div class="card-description">
+                                Select how many leads you want to generate
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="quantity-wrap">
+
+                            <div class="quantity-main">
+
+                                <div class="quantity-value">
+
+                                    <div class="quantity-number">
+
+                                        <span id="quantityValue">
+                                            500
+                                        </span>
+
+                                        <span style="font-size:14px;color:#9299a7;">
+                                            leads
+                                        </span>
+
+                                    </div>
+
+                                    <div class="quantity-credits">
+
+                                        Required:
+                                        <strong id="requiredCredits">
+                                            50 Credits
+                                        </strong>
+
+                                    </div>
+
+                                </div>
+
+
+                                <input type="range" id="quantity" min="100" max="5000" step="100" value="500">
+
+
+                                <div class="range-labels">
+
+                                    <span>100</span>
+                                    <span>1,000</span>
+                                    <span>2,500</span>
+                                    <span>5,000</span>
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="credit-box">
+
+                                <div class="credit-box-top">
+                                    <span>Your balance</span>
+                                    <span>✦</span>
+                                </div>
+
+                                <div class="credit-box-value">
+
+                                    <span id="balanceCredits">
+                                        420
+                                    </span>
+
+                                    Credits
+
+                                </div>
+
+                                <small>
+                                    10 leads = 1 credit
+                                </small>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- LEAD FIELDS -->
+                <section class="section-card">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                <span class="step-number">4</span>
+                                Lead Information
+                            </div>
+
+                            <div class="card-description">
+                                Select the information you want to collect
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="field-options">
+
+                            <label class="check-item">
+                                <input type="checkbox" value="business_name" checked>
+                                Business Name
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="email" checked>
+                                Email
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="phone" checked>
+                                Phone
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="website" checked>
+                                Website
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="address" checked>
+                                Address
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="city" checked>
+                                City
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="state" checked>
+                                State
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="country" checked>
+                                Country
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="postal_code">
+                                ZIP / Postal
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="rating">
+                                Rating
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="reviews">
+                                Reviews
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="facebook">
+                                Facebook
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="instagram">
+                                Instagram
+                            </label>
+
+                            <label class="check-item">
+                                <input type="checkbox" value="linkedin">
+                                LinkedIn
+                            </label>
+
+                        </div>
+
+
+                        <div style="margin-top:20px;">
+
+                            <div class="switch-row">
+
+                                <div>
+
+                                    <div class="switch-title">
+                                        Verify Email Addresses
+                                    </div>
+
+                                    <div class="switch-description">
+                                        Check email validity before adding leads
+                                    </div>
+
+                                </div>
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="verifyEmails">
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+
+                        <div style="margin-top:10px;">
+
+                            <div class="switch-row">
+
+                                <div>
+
+                                    <div class="switch-title">
+                                        Remove Duplicate Leads
+                                    </div>
+
+                                    <div class="switch-description">
+                                        Automatically remove duplicate businesses
+                                    </div>
+
+                                </div>
+
+                                <label class="switch">
+
+                                    <input type="checkbox" id="removeDuplicates" checked>
+
+                                    <span class="slider"></span>
+
+                                </label>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- GENERATE -->
+                <div class="action-bar">
+
+                    <div class="action-info">
+
+                        <div class="action-icon">
+                            ✦
+                        </div>
+
+                        <div>
+
+                            <strong>
+                                Ready to generate your leads?
+                            </strong>
+
+                            <span id="actionText">
+                                Select your sources and target audience to begin.
+                            </span>
+
+                        </div>
+
+                    </div>
+
+
+                    <button class="generate-btn" id="generateBtn" onclick="startLeadJob()">
+
+                        <span>Generate Leads</span>
+                        <span>→</span>
+
+                    </button>
+
+                </div>
+
+
+                <!-- PROGRESS -->
+                <section class="section-card progress-card" id="progressCard">
+
+                    <div class="card-header">
+
+                        <div>
+
+                            <div class="card-title">
+                                Live Lead Generation
+                            </div>
+
+                            <div class="card-description">
+                                Your scraping job is running
+                            </div>
+
+                        </div>
+
+                        <div id="jobBadge">
+                            <span class="live-badge">
+                                <span></span>
+                                LIVE
+                            </span>
+                        </div>
+
+                    </div>
+
+
+                    <div class="card-body">
+
+                        <div class="progress-top">
+
+                            <div class="progress-status">
+
+                                <span class="status-dot" id="statusDot">
+                                </span>
+
+                                <span id="progressStatus">
+                                    Starting job...
+                                </span>
+
+                            </div>
+
+                            <div class="progress-percent" id="progressPercent">
+                                0%
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-track">
+
+                            <div class="progress-fill" id="progressFill">
+                            </div>
+
+                        </div>
+
+
+                        <div class="progress-details">
+
+                            <span id="progressDetail">
+                                Waiting for n8n...
+                            </span>
+
+                            <span id="progressLeads">
+                                0 / 0 leads
+                            </span>
+
+                        </div>
+
+                    </div>
+                </section>
+
+
+                <!-- RESULTS -->
+                <section class="section-card results-card" id="resultsCard">
+
+                    <div class="card-header">
+
+                        <div class="results-header">
+
+                            <div>
+
+                                <div class="card-title">
+                                    Generated Leads
+                                </div>
+
+                                <div class="card-description">
+                                    Leads appear here as they are discovered
+                                </div>
+
+                            </div>
+
+
+                            <div class="result-actions">
+
+                                <div class="result-count">
+
+                                    ✓
+
+                                    <span id="resultCount">
+                                        0
+                                    </span>
+
+                                    Leads
+
+                                </div>
+
+
+                                <button class="download-btn" onclick="downloadCSV()">
+
+                                    ↓ Download CSV
+
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="table-wrap">
+
+                        <table>
+
+                            <thead>
+
+                                <tr>
+
+                                    <th>Business</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Website</th>
+                                    <th>Address</th>
+                                    <th>City</th>
+                                    <th>State</th>
+                                    <th>Country</th>
+                                    <th>Status</th>
+
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="resultsBody">
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <div class="empty-results" id="emptyResults">
+
+                        No leads yet. Start a lead generation job.
+
+                    </div>
+
+                </section>
+
+
+            </div>
+        </main>
+    </div>
+
+
+    <div class="toast" id="toast">
+    </div>
+
+
+    <script>
+
+        /*
+        ==============================================================
+                            N8N CONFIGURATION
+        ==============================================================
+        
+        YAHAN APNE 3 WEBHOOK URLs PASTE KARO.
+        
+        1. START WEBHOOK
+           Form n8n ko send karega.
+        
+        2. STATUS WEBHOOK
+           UI har 2 seconds baad progress check karegi.
+        
+        3. RESULTS WEBHOOK
+           UI har 2 seconds baad new leads check karegi.
+        
+        ==============================================================
+        */
+
+        const N8N_START_WEBHOOK =
+            "https://masterdoodles.app.n8n.cloud/webhook-test/lead-generator";
+
+        const N8N_STATUS_WEBHOOK =
+            "YOUR_N8N_STATUS_WEBHOOK";
+
+        const N8N_RESULTS_WEBHOOK =
+            "YOUR_N8N_RESULTS_WEBHOOK";
+
+
+        /*
+        ==============================================================
+                            GLOBAL VARIABLES
+        ==============================================================
+        */
+
+        let currentJobId = null;
+
+        let statusInterval = null;
+
+        let resultsInterval = null;
+
+        let currentResults = [];
+
+        let lastResultCount = 0;
+
+        let isDemoMode = false;
+
+
+        /*
+        ==============================================================
+                            PLATFORM COUNTER
+        ==============================================================
+        */
+
+        document
+            .querySelectorAll(".platform-option input")
+            .forEach(function (input) {
+
+                input.addEventListener("change", function () {
+
+                    const selected =
+                        document.querySelectorAll(
+                            ".platform-option input:checked"
+                        ).length;
+
+                    document.getElementById(
+                        "selectedCount"
+                    ).textContent =
+                        selected + " Selected";
+
+                });
+
+            });
+
+
+        /*
+        ==============================================================
+                            QUANTITY
+        ==============================================================
+        */
+
+        const quantityInput =
+            document.getElementById("quantity");
+
+        quantityInput.addEventListener(
+            "input",
+            updateCredits
+        );
+
+
+        function updateCredits() {
+
+            const quantity =
+                parseInt(quantityInput.value);
+
+            /*
+            10 leads = 1 credit
+            */
+
+            const credits =
+                Math.ceil(quantity / 10);
+
+            document.getElementById(
+                "quantityValue"
+            ).textContent =
+                quantity.toLocaleString();
+
+            document.getElementById(
+                "requiredCredits"
+            ).textContent =
+                credits + " Credits";
+
+            document.getElementById(
+                "actionText"
+            ).textContent =
+                quantity.toLocaleString() +
+                " leads will use approximately " +
+                credits +
+                " credits.";
+
+        }
+
+
+        /*
+        ==============================================================
+                            COLLECT FORM
+        ==============================================================
+        */
+
+        function collectFormData() {
+
+            const platforms = [];
+
+            document
+                .querySelectorAll(
+                    ".platform-option input:checked"
+                )
+                .forEach(function (input) {
+
+                    platforms.push(input.value);
+
+                });
+
+
+            const fields = [];
+
+            document
+                .querySelectorAll(
+                    ".field-options input:checked"
+                )
+                .forEach(function (input) {
+
+                    fields.push(input.value);
+
+                });
+
+
+            return {
+
+                platforms: platforms,
+
+                country:
+                    document.getElementById(
+                        "country"
+                    ).value,
+
+                state:
+                    document.getElementById(
+                        "state"
+                    ).value,
+
+                city:
+                    document.getElementById(
+                        "city"
+                    ).value,
+
+                niche:
+                    document.getElementById(
+                        "niche"
+                    ).value,
+
+                keyword:
+                    document.getElementById(
+                        "keyword"
+                    ).value,
+
+                postal_code:
+                    document.getElementById(
+                        "postal"
+                    ).value,
+
+                quantity:
+                    parseInt(
+                        document.getElementById(
+                            "quantity"
+                        ).value
+                    ),
+
+                fields: fields,
+
+                verify_emails:
+                    document.getElementById(
+                        "verifyEmails"
+                    ).checked,
+
+                remove_duplicates:
+                    document.getElementById(
+                        "removeDuplicates"
+                    ).checked
+
+            };
+
+        }
+
+
+        /*
+        ==============================================================
+                    AUTHENTICATED N8N REQUEST HELPERS
+        ==============================================================
+        */
+
+        function getLeadForgeAuthHeader() {
+
+            const token =
+                sessionStorage.getItem(
+                    "leadforge_auth"
+                );
+
+            if (!token) {
+
+                window.location.replace(
+                    "./login.html"
+                );
+
+                throw new Error(
+                    "LeadForge login session missing."
+                );
+
+            }
+
+            return "Basic " + token;
+
+        }
+
+
+        function logoutLeadForge() {
+
+            sessionStorage.removeItem(
+                "leadforge_auth"
+            );
+
+            sessionStorage.removeItem(
+                "leadforge_logged_in"
+            );
+
+            window.location.replace(
+                "./login.html"
+            );
+
+        }
+
+
+
+        /*
+        ==============================================================
+                            START JOB
+        ==============================================================
+        */
+
+        async function startLeadJob() {
+
+            const data =
+                collectFormData();
+
+
+            /*
+            VALIDATION
+            */
+
+            if (data.platforms.length === 0) {
+
+                showToast(
+                    "Select at least one source."
+                );
+
+                return;
+
+            }
+
+
+            if (!data.country) {
+
+                showToast(
+                    "Select a country."
+                );
+
+                return;
+
+            }
+
+
+            if (!data.niche) {
+
+                showToast(
+                    "Select a business niche."
+                );
+
+                return;
+
+            }
+
+
+            const requiredCredits =
+                Math.ceil(data.quantity / 10);
+
+
+            const availableCredits = 420;
+
+
+            if (requiredCredits > availableCredits) {
+
+                showToast(
+                    "You don't have enough credits."
+                );
+
+                return;
+
+            }
+
+
+            /*
+            RESET PREVIOUS JOB
+            */
+
+            stopPolling();
+
+            currentResults = [];
+
+            lastResultCount = 0;
+
+            currentJobId = null;
+
+
+            document.getElementById(
+                "resultsBody"
+            ).innerHTML = "";
+
+            document.getElementById(
+                "emptyResults"
+            ).style.display = "block";
+
+
+            /*
+            SHOW UI
+            */
+
+            document.getElementById(
+                "progressCard"
+            ).classList.add("show");
+
+
+            document.getElementById(
+                "resultsCard"
+            ).classList.add("show");
+
+
+            document.getElementById(
+                "generateBtn"
+            ).disabled = true;
+
+
+            document.getElementById(
+                "generateBtn"
+            ).innerHTML =
+                "<span>Starting Job...</span>";
+
+
+            updateProgress(
+                0,
+                "Starting job...",
+                "Sending request to n8n...",
+                0,
+                data.quantity
+            );
+
+
+            /*
+            ==========================================================
+                                DEMO MODE
+            ==========================================================
+            */
+
+            if (
+                N8N_START_WEBHOOK ===
+                "YOUR_N8N_START_WEBHOOK"
+            ) {
+
+                isDemoMode = true;
+
+                startDemoJob(
+                    data.quantity
+                );
+
+                return;
+
+            }
+
+
+            isDemoMode = false;
+
+
+            /*
+            ==========================================================
+                                REAL N8N
+            ==========================================================
+            */
+
+            try {
+
+                const response =
+                    await fetch(
+                        N8N_START_WEBHOOK,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                                "Authorization":
+                                    getLeadForgeAuthHeader()
+                            },
+
+                            body:
+                                JSON.stringify(data)
+
+                        }
+                    );
+
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        "n8n start webhook failed"
+                    );
+
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                /*
+                Expected:
+        
+                {
+                    "job_id":"JOB-123",
+                    "status":"running"
+                }
+                */
+
+
+                if (!result.job_id) {
+
+                    throw new Error(
+                        "n8n did not return job_id"
+                    );
+
+                }
+
+
+                currentJobId =
+                    result.job_id;
+
+
+                showToast(
+                    "Job " +
+                    currentJobId +
+                    " started."
+                );
+
+
+                /*
+                START POLLING
+                */
+
+                startPolling(
+                    data.quantity
+                );
+
+
+            }
+            catch (error) {
+
+                console.error(error);
+
+                showError(
+                    "Unable to start n8n job."
+                );
+
+                resetGenerateButton();
+
+            }
+
+        }
+
+
+        /*
+        ==============================================================
+                            POLLING
+        ==============================================================
+        */
+
+        function startPolling(totalQuantity) {
+
+            /*
+            STATUS
+            */
+
+            statusInterval =
+                setInterval(
+                    function () {
+
+                        fetchJobStatus(
+                            totalQuantity
+                        );
+
+                    },
+                    2000
+                );
+
+
+            /*
+            RESULTS
+            */
+
+            resultsInterval =
+                setInterval(
+                    function () {
+
+                        fetchJobResults();
+
+                    },
+                    2000
+                );
+
+
+            /*
+            IMMEDIATE CHECK
+            */
+
+            fetchJobStatus(
+                totalQuantity
+            );
+
+            fetchJobResults();
+
+        }
+
+
+        /*
+        ==============================================================
+                            STOP POLLING
+        ==============================================================
+        */
+
+        function stopPolling() {
+
+            if (statusInterval) {
+
+                clearInterval(
+                    statusInterval
+                );
+
+                statusInterval = null;
+
+            }
+
+
+            if (resultsInterval) {
+
+                clearInterval(
+                    resultsInterval
+                );
+
+                resultsInterval = null;
+
+            }
+
+        }
+
+
+        /*
+        ==============================================================
+                            STATUS REQUEST
+        ==============================================================
+        */
+
+        async function fetchJobStatus(
+            totalQuantity
+        ) {
+
+            if (!currentJobId) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        N8N_STATUS_WEBHOOK +
+                        "?job_id=" +
+                        encodeURIComponent(
+                            currentJobId
+                        ),
+                        {
+                            headers: {
+                                "Authorization":
+                                    getLeadForgeAuthHeader()
+                            }
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const status =
+                    await response.json();
+
+
+                /*
+                Expected:
+        
+                {
+                    "job_id":"JOB-123",
+                    "status":"running",
+                    "progress":68,
+                    "found":682,
+                    "total":1000,
+                    "stage":"Extracting emails"
+                }
+                */
+
+
+                const progress =
+                    Number(
+                        status.progress || 0
+                    );
+
+
+                const found =
+                    Number(
+                        status.found || 0
+                    );
+
+
+                const total =
+                    Number(
+                        status.total ||
+                        totalQuantity
+                    );
+
+
+                updateProgress(
+                    progress,
+                    formatStatus(
+                        status.status
+                    ),
+                    status.stage ||
+                    "Processing...",
+                    found,
+                    total
+                );
+
+
+                /*
+                JOB COMPLETED
+                */
+
+                if (
+                    status.status ===
+                    "completed"
+                ) {
+
+                    updateProgress(
+                        100,
+                        "Completed",
+                        "Lead generation completed.",
+                        found,
+                        total
+                    );
+
+
+                    stopPolling();
+
+                    resetGenerateButton();
+
+                    markCompleted();
+
+                    /*
+                    One final result request
+                    */
+
+                    fetchJobResults();
+
+                    showToast(
+                        "Lead generation completed."
+                    );
+
+                }
+
+
+                /*
+                JOB FAILED
+                */
+
+                if (
+                    status.status ===
+                    "failed"
+                ) {
+
+                    stopPolling();
+
+                    showError(
+                        status.message ||
+                        "Lead generation failed."
+                    );
+
+                    resetGenerateButton();
+
+                }
+
+            }
+            catch (error) {
+
+                console.log(
+                    "Status polling error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+        ==============================================================
+                            RESULTS REQUEST
+        ==============================================================
+        */
+
+        async function fetchJobResults() {
+
+            if (!currentJobId) {
+                return;
+            }
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        N8N_RESULTS_WEBHOOK +
+                        "?job_id=" +
+                        encodeURIComponent(
+                            currentJobId
+                        ),
+                        {
+                            headers: {
+                                "Authorization":
+                                    getLeadForgeAuthHeader()
+                            }
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    return;
+                }
+
+
+                const data =
+                    await response.json();
+
+
+                /*
+                Expected:
+        
+                {
+                    "job_id":"JOB-123",
+                    "leads":[
+                        {...},
+                        {...}
+                    ]
+                }
+                */
+
+
+                if (
+                    Array.isArray(
+                        data.leads
+                    )
+                ) {
+
+                    /*
+                    Replace current results with latest
+                    server result list.
+        
+                    Duplicate protection happens below.
+                    */
+
+                    addNewLeads(
+                        data.leads
+                    );
+
+                }
+
+            }
+            catch (error) {
+
+                console.log(
+                    "Results polling error:",
+                    error
+                );
+
+            }
+
+        }
+
+
+        /*
+        ==============================================================
+                            ADD NEW LEADS
+        ==============================================================
+        */
+
+        function addNewLeads(leads) {
+
+            if (!leads.length) {
+                return;
+            }
+
+
+            /*
+            Create unique key
+            */
+
+            const existingKeys =
+                new Set(
+                    currentResults.map(
+                        function (lead) {
+
+                            return createLeadKey(
+                                lead
+                            );
+
+                        }
+                    )
+                );
+
+
+            let newLeads = [];
+
+
+            leads.forEach(
+                function (lead) {
+
+                    const key =
+                        createLeadKey(
+                            lead
+                        );
+
+
+                    if (
+                        !existingKeys.has(
+                            key
+                        )
+                    ) {
+
+                        existingKeys.add(
+                            key
+                        );
+
+                        newLeads.push(
+                            lead
+                        );
+
+                    }
+
+                }
+            );
+
+
+            if (!newLeads.length) {
+                return;
+            }
+
+
+            /*
+            Add to global results
+            */
+
+            currentResults.push(
+                ...newLeads
+            );
+
+
+            /*
+            Add rows immediately
+            */
+
+            newLeads.forEach(
+                function (lead) {
+
+                    appendLeadRow(
+                        lead
+                    );
+
+                }
+            );
+
+
+            updateResultCount();
+
+
+            /*
+            Hide empty state
+            */
+
+            document.getElementById(
+                "emptyResults"
+            ).style.display =
+                "none";
+
+
+            /*
+            Scroll results slightly
+            */
+
+            const resultsCard =
+                document.getElementById(
+                    "resultsCard"
+                );
+
+
+            /*
+            Don't force scroll while user is reading.
+            */
+
+        }
+
+
+        /*
+        ==============================================================
+                            LEAD KEY
+        ==============================================================
+        */
+
+        function createLeadKey(lead) {
+
+            return (
+                lead.email ||
+                lead.website ||
+                lead.phone ||
+                lead.business_name
+                || ""
+            )
+                .toString()
+                .toLowerCase()
+                .trim();
+
+        }
+
+
+        /*
+        ==============================================================
+                            APPEND TABLE ROW
+        ==============================================================
+        */
+
+        function appendLeadRow(lead) {
+
+            const tbody =
+                document.getElementById(
+                    "resultsBody"
+                );
+
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const website =
+                lead.website
+                    ?
+                    `
+    <a
+        href="${escapeAttribute(
+                        lead.website
+                    )}"
+        target="_blank"
+        rel="noopener noreferrer">
+        Visit Website
+    </a>
+    `
+                    :
+                    "-";
+
+
+            row.innerHTML = `
+
+        <td>
+            ${escapeHTML(
+                lead.business_name ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.email ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.phone ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${website}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.address ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.city ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.state ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            ${escapeHTML(
+                lead.country ||
+                "-"
+            )}
+        </td>
+
+        <td>
+            <span class="table-status">
+                ${escapeHTML(
+                lead.status ||
+                "Found"
+            )}
+            </span>
+        </td>
+
+    `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                            PROGRESS
+        ==============================================================
+        */
+
+        function updateProgress(
+            percent,
+            status,
+            detail,
+            found,
+            total
+        ) {
+
+            document.getElementById(
+                "progressFill"
+            ).style.width =
+                Math.min(
+                    100,
+                    Math.max(
+                        0,
+                        percent
+                    )
+                ) + "%";
+
+
+            document.getElementById(
+                "progressPercent"
+            ).textContent =
+                Math.round(percent) +
+                "%";
+
+
+            document.getElementById(
+                "progressStatus"
+            ).textContent =
+                status;
+
+
+            document.getElementById(
+                "progressDetail"
+            ).textContent =
+                detail;
+
+
+            document.getElementById(
+                "progressLeads"
+            ).textContent =
+                Number(
+                    found || 0
+                ).toLocaleString() +
+                " / " +
+                Number(
+                    total || 0
+                ).toLocaleString() +
+                " leads";
+
+        }
+
+
+        /*
+        ==============================================================
+                            STATUS TEXT
+        ==============================================================
+        */
+
+        function formatStatus(status) {
+
+            const statuses = {
+
+                running:
+                    "Scraping in progress",
+
+                queued:
+                    "Job queued",
+
+                starting:
+                    "Starting scraper",
+
+                processing:
+                    "Processing leads",
+
+                completed:
+                    "Completed",
+
+                failed:
+                    "Failed"
+
+            };
+
+
+            return (
+                statuses[status] ||
+                "Processing..."
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                            COMPLETED
+        ==============================================================
+        */
+
+        function markCompleted() {
+
+            const dot =
+                document.getElementById(
+                    "statusDot"
+                );
+
+
+            dot.classList.remove(
+                "error"
+            );
+
+
+            dot.classList.add(
+                "completed"
+            );
+
+
+            document.getElementById(
+                "jobBadge"
+            ).innerHTML =
+                `
+    <span
+        class="table-status">
+        COMPLETED
+    </span>
+    `;
+
+        }
+
+
+        /*
+        ==============================================================
+                            ERROR
+        ==============================================================
+        */
+
+        function showError(message) {
+
+            const dot =
+                document.getElementById(
+                    "statusDot"
+                );
+
+
+            dot.classList.remove(
+                "completed"
+            );
+
+
+            dot.classList.add(
+                "error"
+            );
+
+
+            document.getElementById(
+                "progressStatus"
+            ).textContent =
+                "Job Failed";
+
+
+            document.getElementById(
+                "progressDetail"
+            ).textContent =
+                message;
+
+
+            document.getElementById(
+                "jobBadge"
+            ).innerHTML =
+                `
+    <span
+        style="
+        background:#fef2f2;
+        color:#dc2626;
+        padding:5px 9px;
+        border-radius:7px;
+        font-size:9px;
+        font-weight:700;">
+        FAILED
+    </span>
+    `;
+
+
+            showToast(
+                message
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                            RESET BUTTON
+        ==============================================================
+        */
+
+        function resetGenerateButton() {
+
+            const button =
+                document.getElementById(
+                    "generateBtn"
+                );
+
+
+            button.disabled =
+                false;
+
+
+            button.innerHTML =
+                `
+    <span>
+        Generate Leads
+    </span>
+
+    <span>
+        →
+    </span>
+    `;
+
+        }
+
+
+        /*
+        ==============================================================
+                            RESULT COUNT
+        ==============================================================
+        */
+
+        function updateResultCount() {
+
+            document.getElementById(
+                "resultCount"
+            ).textContent =
+                currentResults.length
+                    .toLocaleString();
+
+        }
+
+
+        /*
+        ==============================================================
+                            CSV DOWNLOAD
+        ==============================================================
+        */
+
+        function downloadCSV() {
+
+            if (
+                currentResults.length === 0
+            ) {
+
+                showToast(
+                    "No leads available yet."
+                );
+
+                return;
+
+            }
+
+
+            const headers = [
+
+                "Business Name",
+                "Email",
+                "Phone",
+                "Website",
+                "Address",
+                "City",
+                "State",
+                "Country",
+                "Status"
+
+            ];
+
+
+            const rows =
+                currentResults.map(
+                    function (lead) {
+
+                        return [
+
+                            lead.business_name || "",
+                            lead.email || "",
+                            lead.phone || "",
+                            lead.website || "",
+                            lead.address || "",
+                            lead.city || "",
+                            lead.state || "",
+                            lead.country || "",
+                            lead.status || ""
+
+                        ];
+
+                    }
+                );
+
+
+            const csv = [
+
+                headers,
+                ...rows
+
+            ]
+
+                .map(
+                    function (row) {
+
+                        return row
+                            .map(
+                                function (value) {
+
+                                    return '"' +
+                                        String(value)
+                                            .replace(
+                                                /"/g,
+                                                '""'
+                                            ) +
+                                        '"';
+
+                                }
+                            )
+                            .join(",");
+
+                    }
+                )
+                .join("\n");
+
+
+            const blob =
+                new Blob(
+                    [csv],
+                    {
+                        type:
+                            "text/csv;charset=utf-8;"
+                    }
+                );
+
+
+            const url =
+                URL.createObjectURL(
+                    blob
+                );
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                url;
+
+
+            link.download =
+                "leads-" +
+                new Date()
+                    .toISOString()
+                    .slice(0, 10) +
+                ".csv";
+
+
+            document.body.appendChild(
+                link
+            );
+
+
+            link.click();
+
+
+            document.body.removeChild(
+                link
+            );
+
+
+            URL.revokeObjectURL(
+                url
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                            DEMO MODE
+        ==============================================================
+        */
+
+        function startDemoJob(
+            quantity
+        ) {
+
+            currentJobId =
+                "DEMO-" +
+                Date.now();
+
+
+            let progress = 0;
+
+
+            const interval =
+                setInterval(
+                    function () {
+
+                        progress += 10;
+
+
+                        const found =
+                            Math.floor(
+                                quantity *
+                                progress /
+                                100
+                            );
+
+
+                        let status =
+                            "Finding businesses...";
+
+
+                        let detail =
+                            "Searching selected sources...";
+
+
+                        if (progress >= 30) {
+
+                            status =
+                                "Collecting business details";
+
+                            detail =
+                                "Extracting company information...";
+
+                        }
+
+
+                        if (progress >= 50) {
+
+                            status =
+                                "Finding websites";
+
+                            detail =
+                                "Checking business websites...";
+
+                        }
+
+
+                        if (progress >= 70) {
+
+                            status =
+                                "Extracting emails";
+
+                            detail =
+                                "Looking for public contact information...";
+
+                        }
+
+
+                        if (progress >= 90) {
+
+                            status =
+                                "Finalizing leads";
+
+                            detail =
+                                "Cleaning and deduplicating results...";
+
+                        }
+
+
+                        updateProgress(
+                            progress,
+                            status,
+                            detail,
+                            found,
+                            quantity
+                        );
+
+
+                        /*
+                        Generate some demo leads during job
+                        */
+
+                        if (
+                            progress === 20 ||
+                            progress === 40 ||
+                            progress === 60 ||
+                            progress === 80 ||
+                            progress === 100
+                        ) {
+
+                            const demo =
+                                generateDemoLeads(
+                                    5
+                                );
+
+                            addNewLeads(
+                                demo
+                            );
+
+                        }
+
+
+                        if (progress >= 100) {
+
+                            clearInterval(
+                                interval
+                            );
+
+
+                            markCompleted();
+
+                            resetGenerateButton();
+
+                            showToast(
+                                "Demo job completed."
+                            );
+
+                        }
+
+                    },
+                    700
+                );
+
+        }
+
+
+        /*
+        ==============================================================
+                            DEMO LEADS
+        ==============================================================
+        */
+
+        function generateDemoLeads(
+            count
+        ) {
+
+            const businesses = [
+
+                "Houston Elite Catering",
+                "Texas Wedding Catering",
+                "Premium Event Catering",
+                "Houston Event Services",
+                "Lone Star Catering",
+                "Elite Events Houston",
+                "Grand Table Catering",
+                "Texas Corporate Catering",
+                "Houston Food Events",
+                "Premier Wedding Caterers"
+
+            ];
+
+
+            const leads = [];
+
+
+            for (
+                let i = 0;
+                i < count;
+                i++
+            ) {
+
+                const index =
+                    (
+                        Date.now() +
+                        i
+                    )
+                    %
+                    businesses.length;
+
+
+                leads.push({
+
+                    business_name:
+                        businesses[index] +
+                        " " +
+                        Math.floor(
+                            Math.random() * 999
+                        ),
+
+                    email:
+                        "info@example" +
+                        Math.floor(
+                            Math.random() * 9999
+                        ) +
+                        ".com",
+
+                    phone:
+                        "+1 713-555-" +
+                        String(
+                            Math.floor(
+                                Math.random() *
+                                9999
+                            )
+                        )
+                            .padStart(
+                                4,
+                                "0"
+                            ),
+
+                    website:
+                        "https://example.com",
+
+                    address:
+                        Math.floor(
+                            Math.random() * 9000
+                        ) +
+                        " Main Street",
+
+                    city:
+                        "Houston",
+
+                    state:
+                        "Texas",
+
+                    country:
+                        "United States",
+
+                    status:
+                        "Verified"
+
+                });
+
+            }
+
+
+            return leads;
+
+        }
+
+
+        /*
+        ==============================================================
+                            TOAST
+        ==============================================================
+        */
+
+        function showToast(
+            message
+        ) {
+
+            const toast =
+                document.getElementById(
+                    "toast"
+                );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            setTimeout(
+                function () {
+
+                    toast.classList.remove(
+                        "show"
+                    );
+
+                },
+                3000
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                            SIDEBAR
+        ==============================================================
+        */
+
+        function toggleSidebar() {
+
+            document
+                .getElementById(
+                    "sidebar"
+                )
+                .classList.toggle(
+                    "open"
+                );
+
+        }
+
+
+        /*
+        ==============================================================
+                            SECURITY
+        ==============================================================
+        */
+
+        function escapeHTML(
+            value
+        ) {
+
+            return String(value)
+                .replace(
+                    /&/g,
+                    "&amp;"
+                )
+                .replace(
+                    /</g,
+                    "&lt;"
+                )
+                .replace(
+                    />/g,
+                    "&gt;"
+                )
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        function escapeAttribute(
+            value
+        ) {
+
+            return String(value)
+                .replace(
+                    /"/g,
+                    "&quot;"
+                )
+                .replace(
+                    /'/g,
+                    "&#039;"
+                );
+
+        }
+
+
+        /*
+        ==============================================================
+                            INITIAL
+        ==============================================================
+        */
+
+        updateCredits();
+
+    </script>
+
+</body>
+
+</html>

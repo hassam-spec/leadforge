@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LeadForge - Login</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #f5f7fb;
+            --card: #ffffff;
+            --border: #e5e7eb;
+            --text: #172033;
+            --muted: #7b8496;
+            --primary: #635bff;
+            --primary-dark: #5048e5;
+            --soft-primary: #f0efff;
+            --danger: #dc2626;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, Arial, Helvetica, sans-serif;
+            background:
+                radial-gradient(circle at 15% 20%, rgba(99, 91, 255, .09), transparent 28%),
+                radial-gradient(circle at 85% 75%, rgba(124, 115, 255, .08), transparent 30%),
+                var(--bg);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        button,
+        input {
+            font-family: inherit;
+        }
+
+        .login-shell {
+            width: 100%;
+            max-width: 440px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 11px;
+            margin-bottom: 24px;
+        }
+
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #7c73ff, #635bff);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 19px;
+            font-weight: 800;
+            box-shadow: 0 8px 22px rgba(99, 91, 255, .22);
+        }
+
+        .logo-text {
+            font-size: 23px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .logo-text span {
+            color: #635bff;
+        }
+
+        .login-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 34px;
+            box-shadow: 0 18px 45px rgba(23, 32, 51, .08);
+        }
+
+        .login-heading {
+            font-size: 24px;
+            line-height: 1.2;
+            font-weight: 800;
+            text-align: center;
+        }
+
+        .login-subtitle {
+            margin-top: 8px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        .form {
+            margin-top: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #394255;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input {
+            width: 100%;
+            height: 48px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 0 14px;
+            outline: none;
+            background: #fff;
+            color: var(--text);
+            font-size: 13px;
+            transition: .18s;
+        }
+
+        .password-input {
+            padding-right: 76px;
+        }
+
+        .input:focus {
+            border-color: #8d87ff;
+            box-shadow: 0 0 0 3px rgba(99, 91, 255, .08);
+        }
+
+        .input::placeholder {
+            color: #a8afbc;
+        }
+
+        .show-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 0;
+            background: transparent;
+            color: #635bff;
+            font-size: 11px;
+            font-weight: 750;
+            cursor: pointer;
+            padding: 7px 6px;
+        }
+
+        .login-btn {
+            width: 100%;
+            height: 48px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--primary);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 750;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(99, 91, 255, .22);
+            transition: .18s;
+            margin-top: 4px;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .login-btn:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+        }
+
+        .error-box {
+            display: none;
+            margin-top: 15px;
+            border: 1px solid #fecaca;
+            background: #fef2f2;
+            color: #b91c1c;
+            border-radius: 9px;
+            padding: 10px 12px;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .error-box.show {
+            display: block;
+        }
+
+        .security-note {
+            margin-top: 18px;
+            display: flex;
+            align-items: flex-start;
+            gap: 9px;
+            padding: 11px 12px;
+            border-radius: 10px;
+            background: #f8f7ff;
+            border: 1px solid #e4e1ff;
+            color: #6a659b;
+            font-size: 10px;
+            line-height: 1.55;
+        }
+
+        .security-icon {
+            width: 22px;
+            height: 22px;
+            flex: 0 0 22px;
+            border-radius: 7px;
+            background: #eceaff;
+            color: #554ee3;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .footer {
+            margin-top: 18px;
+            color: #9aa2b1;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        @media(max-width: 520px) {
+            body {
+                padding: 16px;
+            }
+
+            .login-card {
+                padding: 27px 20px;
+                border-radius: 15px;
+            }
+
+            .login-heading {
+                font-size: 21px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-shell">
+
+        <div class="brand">
+            <div class="logo-icon">L</div>
+            <div class="logo-text">Lead<span>Forge</span></div>
+        </div>
+
+        <div class="login-card">
+
+            <h1 class="login-heading">Welcome back</h1>
+
+            <p class="login-subtitle">
+                Sign in to access your LeadForge lead generation workspace.
+            </p>
+
+            <form class="form" id="loginForm">
+
+                <div class="form-group">
+                    <label class="form-label" for="username">
+                        Username
+                    </label>
+
+                    <input
+                        class="input"
+                        type="text"
+                        id="username"
+                        name="username"
+                        placeholder="Enter username"
+                        autocomplete="username"
+                        required
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="password">
+                        Password
+                    </label>
+
+                    <div class="input-wrap">
+                        <input
+                            class="input password-input"
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="Enter password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            class="show-password"
+                            type="button"
+                            id="togglePassword"
+                        >
+                            Show
+                        </button>
+                    </div>
+                </div>
+
+                <button
+                    class="login-btn"
+                    type="submit"
+                    id="loginBtn"
+                >
+                    Login to LeadForge
+                </button>
+
+                <div
+                    class="error-box"
+                    id="errorBox"
+                    role="alert"
+                ></div>
+
+            </form>
+
+            <div class="security-note">
+                <div class="security-icon">✓</div>
+                <div>
+                    Access is validated by the LeadForge backend.
+                    No username or password is hardcoded in this page.
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer">
+            LeadForge Private Access
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /*
+        ==============================================================
+                            AUTH CONFIGURATION
+        ==============================================================
+
+        n8n me ek Webhook banao:
+
+        GET /leadforge-auth
+
+        Authentication:
+        Basic Auth
+
+        Production URL yahan paste karo.
+
+        Example:
+        https://YOUR-N8N.app.n8n.cloud/webhook/leadforge-auth
+
+        ==============================================================
+        */
+
+        const N8N_AUTH_WEBHOOK =
+            "https://masterdoodles.app.n8n.cloud/webhook/leadforge-auth";
+
+
+        /*
+        ==============================================================
+                            ELEMENTS
+        ==============================================================
+        */
+
+        const loginForm =
+            document.getElementById(
+                "loginForm"
+            );
+
+        const usernameInput =
+            document.getElementById(
+                "username"
+            );
+
+        const passwordInput =
+            document.getElementById(
+                "password"
+            );
+
+        const loginBtn =
+            document.getElementById(
+                "loginBtn"
+            );
+
+        const errorBox =
+            document.getElementById(
+                "errorBox"
+            );
+
+        const togglePassword =
+            document.getElementById(
+                "togglePassword"
+            );
+
+
+        /*
+        ==============================================================
+                        ALREADY LOGGED IN
+        ==============================================================
+        */
+
+        if (
+            sessionStorage.getItem(
+                "leadforge_auth"
+            )
+        ) {
+
+            window.location.replace(
+                "./index.html"
+            );
+
+        }
+
+
+        /*
+        ==============================================================
+                        SHOW / HIDE PASSWORD
+        ==============================================================
+        */
+
+        togglePassword.addEventListener(
+            "click",
+            function () {
+
+                const isPassword =
+                    passwordInput.type ===
+                    "password";
+
+                passwordInput.type =
+                    isPassword
+                        ? "text"
+                        : "password";
+
+                togglePassword.textContent =
+                    isPassword
+                        ? "Hide"
+                        : "Show";
+
+            }
+        );
+
+
+        /*
+        ==============================================================
+                            LOGIN
+        ==============================================================
+        */
+
+        loginForm.addEventListener(
+            "submit",
+            async function (event) {
+
+                event.preventDefault();
+
+                hideError();
+
+
+                const username =
+                    usernameInput.value.trim();
+
+                const password =
+                    passwordInput.value;
+
+
+                if (!username || !password) {
+
+                    showError(
+                        "Enter your username and password."
+                    );
+
+                    return;
+
+                }
+
+
+                /*
+                Basic Auth value is generated at runtime.
+                Credentials are NOT stored in source code.
+                */
+
+                const authToken =
+                    btoa(
+                        unescape(
+                            encodeURIComponent(
+                                username +
+                                ":" +
+                                password
+                            )
+                        )
+                    );
+
+
+                setLoading(true);
+
+
+                try {
+
+                    const response =
+                        await fetch(
+                            N8N_AUTH_WEBHOOK,
+                            {
+                                method: "GET",
+
+                                headers: {
+                                    "Authorization":
+                                        "Basic " +
+                                        authToken,
+
+                                    "Accept":
+                                        "application/json"
+                                },
+
+                                cache:
+                                    "no-store"
+                            }
+                        );
+
+
+                    if (!response.ok) {
+
+                        throw new Error(
+                            "INVALID_LOGIN"
+                        );
+
+                    }
+
+
+                    /*
+                    A successful authenticated webhook response
+                    is enough for login.
+
+                    Recommended n8n response:
+
+                    {
+                        "authenticated": true
+                    }
+                    */
+
+                    let result = {};
+
+                    try {
+
+                        result =
+                            await response.json();
+
+                    }
+                    catch (e) {
+
+                        result = {};
+
+                    }
+
+
+                    if (
+                        result.authenticated ===
+                        false
+                    ) {
+
+                        throw new Error(
+                            "INVALID_LOGIN"
+                        );
+
+                    }
+
+
+                    /*
+                    Store only for this browser session.
+                    sessionStorage is cleared when the session closes.
+                    */
+
+                    sessionStorage.setItem(
+                        "leadforge_auth",
+                        authToken
+                    );
+
+                    sessionStorage.setItem(
+                        "leadforge_logged_in",
+                        "1"
+                    );
+
+
+                    window.location.replace(
+                        "./index.html"
+                    );
+
+                }
+                catch (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
+                    );
+
+
+                    if (
+                        error.message ===
+                        "INVALID_LOGIN"
+                    ) {
+
+                        showError(
+                            "Invalid username or password."
+                        );
+
+                    }
+                    else {
+
+                        showError(
+                            "Unable to connect to the authentication server."
+                        );
+
+                    }
+
+                }
+                finally {
+
+                    setLoading(false);
+
+                }
+
+            }
+        );
+
+
+        /*
+        ==============================================================
+                            HELPERS
+        ==============================================================
+        */
+
+        function setLoading(
+            loading
+        ) {
+
+            loginBtn.disabled =
+                loading;
+
+            usernameInput.disabled =
+                loading;
+
+            passwordInput.disabled =
+                loading;
+
+            loginBtn.textContent =
+                loading
+                    ? "Signing in..."
+                    : "Login to LeadForge";
+
+        }
+
+
+        function showError(
+            message
+        ) {
+
+            errorBox.textContent =
+                message;
+
+            errorBox.classList.add(
+                "show"
+            );
+
+        }
+
+
+        function hideError() {
+
+            errorBox.textContent =
+                "";
+
+            errorBox.classList.remove(
+                "show"
+            );
+
+        }
+
+    </script>
+
+</body>
+
+</html>
