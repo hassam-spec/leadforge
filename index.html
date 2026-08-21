@@ -405,6 +405,119 @@
             color: #a8afbc;
         }
 
+
+        /* SEARCHABLE LOCATION SELECTORS */
+
+        .location-combobox {
+            position: relative;
+        }
+
+        .location-input-wrap {
+            position: relative;
+        }
+
+        .location-input {
+            padding-right: 38px;
+        }
+
+        .location-input:disabled {
+            background: #f7f8fa;
+            color: #9aa2b1;
+            cursor: not-allowed;
+        }
+
+        .location-toggle {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            width: 29px;
+            height: 29px;
+            transform: translateY(-50%);
+            border: 0;
+            border-radius: 7px;
+            background: transparent;
+            color: #7b8496;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            transition: .18s;
+        }
+
+        .location-toggle:hover {
+            background: #f3f4f7;
+            color: var(--primary);
+        }
+
+        .location-toggle:disabled {
+            cursor: not-allowed;
+            opacity: .45;
+        }
+
+        .location-dropdown {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: calc(100% + 6px);
+            max-height: 260px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 14px 35px rgba(23, 32, 51, .12);
+            z-index: 80;
+            display: none;
+            padding: 5px;
+        }
+
+        .location-dropdown.show {
+            display: block;
+        }
+
+        .location-option {
+            width: 100%;
+            border: 0;
+            background: #fff;
+            color: #3e4758;
+            text-align: left;
+            padding: 10px 11px;
+            border-radius: 7px;
+            cursor: pointer;
+            font-size: 12px;
+            line-height: 1.35;
+        }
+
+        .location-option:hover,
+        .location-option.active {
+            background: var(--soft-primary);
+            color: #4d46d4;
+        }
+
+        .location-empty {
+            padding: 12px;
+            color: #969dad;
+            font-size: 11px;
+            text-align: center;
+        }
+
+        .location-help {
+            min-height: 15px;
+            margin-top: 5px;
+            color: #9aa2b1;
+            font-size: 9px;
+            line-height: 1.4;
+        }
+
+        .location-help.error {
+            color: var(--danger);
+        }
+
+        .location-help.loading {
+            color: var(--primary);
+        }
+
+
         /* QUANTITY */
 
         .quantity-wrap {
@@ -1286,65 +1399,147 @@
 
                             <div class="form-group">
 
-                                <label class="form-label">
+                                <label class="form-label" for="country">
                                     Country
                                 </label>
 
-                                <select class="select" id="country">
+                                <div class="location-combobox" id="countryCombobox">
 
-                                    <option value="">
-                                        Select Country
-                                    </option>
+                                    <div class="location-input-wrap">
 
-                                    <option>United States</option>
-                                    <option>Canada</option>
-                                    <option>United Kingdom</option>
-                                    <option>Australia</option>
-                                    <option>Pakistan</option>
-                                    <option>Germany</option>
-                                    <option>France</option>
-                                    <option>United Arab Emirates</option>
-                                    <option>Saudi Arabia</option>
+                                        <input
+                                            class="input location-input"
+                                            id="country"
+                                            type="text"
+                                            placeholder="Search country..."
+                                            autocomplete="off"
+                                            aria-autocomplete="list"
+                                            aria-expanded="false"
+                                            aria-controls="countryDropdown"
+                                        >
 
-                                </select>
+                                        <button
+                                            class="location-toggle"
+                                            id="countryToggle"
+                                            type="button"
+                                            aria-label="Show countries"
+                                        >
+                                            ▼
+                                        </button>
+
+                                    </div>
+
+                                    <div
+                                        class="location-dropdown"
+                                        id="countryDropdown"
+                                        role="listbox"
+                                    ></div>
+
+                                </div>
+
+                                <div class="location-help loading" id="countryHelp">
+                                    Loading countries...
+                                </div>
 
                             </div>
 
 
                             <div class="form-group">
 
-                                <label class="form-label">
+                                <label class="form-label" for="state">
                                     State / Province
+                                    <span class="optional">Where applicable</span>
                                 </label>
 
-                                <select class="select" id="state">
+                                <div class="location-combobox" id="stateCombobox">
 
-                                    <option value="">
-                                        Select State
-                                    </option>
+                                    <div class="location-input-wrap">
 
-                                    <option>Texas</option>
-                                    <option>California</option>
-                                    <option>Florida</option>
-                                    <option>New York</option>
-                                    <option>New Jersey</option>
-                                    <option>Arizona</option>
-                                    <option>Illinois</option>
-                                    <option>Washington</option>
+                                        <input
+                                            class="input location-input"
+                                            id="state"
+                                            type="text"
+                                            placeholder="Select a country first"
+                                            autocomplete="off"
+                                            aria-autocomplete="list"
+                                            aria-expanded="false"
+                                            aria-controls="stateDropdown"
+                                            disabled
+                                        >
 
-                                </select>
+                                        <button
+                                            class="location-toggle"
+                                            id="stateToggle"
+                                            type="button"
+                                            aria-label="Show states or provinces"
+                                            disabled
+                                        >
+                                            ▼
+                                        </button>
+
+                                    </div>
+
+                                    <div
+                                        class="location-dropdown"
+                                        id="stateDropdown"
+                                        role="listbox"
+                                    ></div>
+
+                                </div>
+
+                                <div class="location-help" id="stateHelp">
+                                    States / provinces load after selecting a country.
+                                </div>
 
                             </div>
 
 
                             <div class="form-group">
 
-                                <label class="form-label">
+                                <label class="form-label" for="city">
                                     City
                                     <span class="optional">Optional</span>
                                 </label>
 
-                                <input class="input" id="city" placeholder="e.g. Houston">
+                                <div class="location-combobox" id="cityCombobox">
+
+                                    <div class="location-input-wrap">
+
+                                        <input
+                                            class="input location-input"
+                                            id="city"
+                                            type="text"
+                                            placeholder="Select a state / province first"
+                                            autocomplete="off"
+                                            aria-autocomplete="list"
+                                            aria-expanded="false"
+                                            aria-controls="cityDropdown"
+                                            disabled
+                                        >
+
+                                        <button
+                                            class="location-toggle"
+                                            id="cityToggle"
+                                            type="button"
+                                            aria-label="Show cities"
+                                            disabled
+                                        >
+                                            ▼
+                                        </button>
+
+                                    </div>
+
+                                    <div
+                                        class="location-dropdown"
+                                        id="cityDropdown"
+                                        role="listbox"
+                                    ></div>
+
+                                </div>
+
+                                <div class="location-help" id="cityHelp">
+                                    Cities load automatically after the state / province is selected.
+                                </div>
 
                             </div>
 
@@ -1890,10 +2085,10 @@
            Form n8n ko send karega.
         
         2. STATUS WEBHOOK
-           UI har 2 seconds baad progress check karegi.
+           UI har 5 seconds baad progress check karegi.
         
         3. RESULTS WEBHOOK
-           UI har 2 seconds baad new leads check karegi.
+           UI har 5 seconds baad new leads check karegi.
         
         ==============================================================
         */
@@ -1925,6 +2120,1323 @@
         let lastResultCount = 0;
 
         let isDemoMode = false;
+
+
+
+        /*
+        ==============================================================
+                    SEARCHABLE COUNTRY / STATE / CITY
+        ==============================================================
+
+        Uses the public CountriesNow API.
+        No API key or secret is stored in the frontend.
+
+        Country:
+        GET /countries/states
+
+        Cities by state:
+        POST /countries/state/cities
+
+        Cities for countries without states:
+        POST /countries/cities
+
+        If the location API is temporarily unavailable, the fields
+        remain usable as normal text fields so lead generation is not
+        blocked.
+        ==============================================================
+        */
+
+        const LOCATION_API_BASE =
+            "https://countriesnow.space/api/v0.1/countries";
+
+        let locationCountries = [];
+
+        let locationStates = [];
+
+        let locationCities = [];
+
+        let selectedCountry = "";
+
+        let selectedState = "";
+
+        let selectedCity = "";
+
+
+        const locationElements = {
+
+            country: {
+                input:
+                    document.getElementById("country"),
+
+                toggle:
+                    document.getElementById("countryToggle"),
+
+                dropdown:
+                    document.getElementById("countryDropdown"),
+
+                help:
+                    document.getElementById("countryHelp")
+            },
+
+            state: {
+                input:
+                    document.getElementById("state"),
+
+                toggle:
+                    document.getElementById("stateToggle"),
+
+                dropdown:
+                    document.getElementById("stateDropdown"),
+
+                help:
+                    document.getElementById("stateHelp")
+            },
+
+            city: {
+                input:
+                    document.getElementById("city"),
+
+                toggle:
+                    document.getElementById("cityToggle"),
+
+                dropdown:
+                    document.getElementById("cityDropdown"),
+
+                help:
+                    document.getElementById("cityHelp")
+            }
+
+        };
+
+
+        /*
+        --------------------------------------------------------------
+        BASIC HELPERS
+        --------------------------------------------------------------
+        */
+
+        function uniqueSortedStrings(values) {
+
+            return Array.from(
+                new Set(
+                    (values || [])
+                        .map(function (value) {
+                            return String(value || "").trim();
+                        })
+                        .filter(Boolean)
+                )
+            )
+                .sort(function (a, b) {
+                    return a.localeCompare(b);
+                });
+
+        }
+
+
+        function getLocationOptions(type) {
+
+            if (type === "country") {
+                return locationCountries.map(function (item) {
+                    return item.name;
+                });
+            }
+
+            if (type === "state") {
+                return locationStates;
+            }
+
+            return locationCities;
+
+        }
+
+
+        function setLocationHelp(
+            type,
+            message,
+            state
+        ) {
+
+            const help =
+                locationElements[type].help;
+
+            help.textContent =
+                message || "";
+
+            help.classList.remove(
+                "error",
+                "loading"
+            );
+
+            if (state) {
+                help.classList.add(state);
+            }
+
+        }
+
+
+        function setLocationEnabled(
+            type,
+            enabled,
+            placeholder
+        ) {
+
+            const part =
+                locationElements[type];
+
+            part.input.disabled =
+                !enabled;
+
+            part.toggle.disabled =
+                !enabled;
+
+            if (placeholder) {
+                part.input.placeholder =
+                    placeholder;
+            }
+
+        }
+
+
+        function closeLocationDropdown(type) {
+
+            const part =
+                locationElements[type];
+
+            part.dropdown.classList.remove(
+                "show"
+            );
+
+            part.input.setAttribute(
+                "aria-expanded",
+                "false"
+            );
+
+        }
+
+
+        function closeAllLocationDropdowns(
+            exceptType
+        ) {
+
+            ["country", "state", "city"]
+                .forEach(function (type) {
+
+                    if (type !== exceptType) {
+                        closeLocationDropdown(type);
+                    }
+
+                });
+
+        }
+
+
+        function openLocationDropdown(type) {
+
+            const part =
+                locationElements[type];
+
+            if (part.input.disabled) {
+                return;
+            }
+
+            closeAllLocationDropdowns(type);
+
+            renderLocationDropdown(
+                type,
+                part.input.value
+            );
+
+            part.dropdown.classList.add(
+                "show"
+            );
+
+            part.input.setAttribute(
+                "aria-expanded",
+                "true"
+            );
+
+        }
+
+
+        /*
+        --------------------------------------------------------------
+        SEARCH + RENDER
+        --------------------------------------------------------------
+        */
+
+        function renderLocationDropdown(
+            type,
+            query
+        ) {
+
+            const part =
+                locationElements[type];
+
+            const options =
+                getLocationOptions(type);
+
+            const normalizedQuery =
+                String(query || "")
+                    .trim()
+                    .toLowerCase();
+
+            let filtered =
+                options;
+
+
+            if (normalizedQuery) {
+
+                const beginsWith = [];
+
+                const contains = [];
+
+
+                options.forEach(function (option) {
+
+                    const normalized =
+                        option.toLowerCase();
+
+                    if (
+                        normalized.startsWith(
+                            normalizedQuery
+                        )
+                    ) {
+
+                        beginsWith.push(option);
+
+                    }
+                    else if (
+                        normalized.includes(
+                            normalizedQuery
+                        )
+                    ) {
+
+                        contains.push(option);
+
+                    }
+
+                });
+
+
+                filtered =
+                    beginsWith.concat(
+                        contains
+                    );
+
+            }
+
+
+            /*
+            Don't render thousands of DOM rows at once.
+            Search remains complete because filtering is performed
+            against the full in-memory list.
+            */
+
+            const visible =
+                filtered.slice(0, 120);
+
+
+            part.dropdown.innerHTML =
+                "";
+
+
+            if (!visible.length) {
+
+                const empty =
+                    document.createElement(
+                        "div"
+                    );
+
+                empty.className =
+                    "location-empty";
+
+                empty.textContent =
+                    "No matches. You can still type the location manually.";
+
+                part.dropdown.appendChild(
+                    empty
+                );
+
+                return;
+
+            }
+
+
+            visible.forEach(
+                function (option) {
+
+                    const button =
+                        document.createElement(
+                            "button"
+                        );
+
+                    button.type =
+                        "button";
+
+                    button.className =
+                        "location-option";
+
+                    button.setAttribute(
+                        "role",
+                        "option"
+                    );
+
+                    button.textContent =
+                        option;
+
+
+                    button.addEventListener(
+                        "mousedown",
+                        function (event) {
+
+                            /*
+                            mousedown prevents input blur from
+                            closing the dropdown before selection.
+                            */
+
+                            event.preventDefault();
+
+                        }
+                    );
+
+
+                    button.addEventListener(
+                        "click",
+                        function () {
+
+                            selectLocation(
+                                type,
+                                option
+                            );
+
+                        }
+                    );
+
+
+                    part.dropdown.appendChild(
+                        button
+                    );
+
+                }
+            );
+
+
+            if (
+                filtered.length >
+                visible.length
+            ) {
+
+                const note =
+                    document.createElement(
+                        "div"
+                    );
+
+                note.className =
+                    "location-empty";
+
+                note.textContent =
+                    "Keep typing to narrow " +
+                    filtered.length +
+                    " matches.";
+
+                part.dropdown.appendChild(
+                    note
+                );
+
+            }
+
+        }
+
+
+        /*
+        --------------------------------------------------------------
+        SELECTION
+        --------------------------------------------------------------
+        */
+
+        async function selectLocation(
+            type,
+            value
+        ) {
+
+            const cleanValue =
+                String(value || "").trim();
+
+            const part =
+                locationElements[type];
+
+            part.input.value =
+                cleanValue;
+
+            closeLocationDropdown(type);
+
+
+            if (type === "country") {
+
+                selectedCountry =
+                    cleanValue;
+
+                selectedState =
+                    "";
+
+                selectedCity =
+                    "";
+
+                locationStates =
+                    [];
+
+                locationCities =
+                    [];
+
+
+                locationElements.state.input.value =
+                    "";
+
+                locationElements.city.input.value =
+                    "";
+
+
+                const countryData =
+                    locationCountries.find(
+                        function (country) {
+
+                            return (
+                                country.name ===
+                                selectedCountry
+                            );
+
+                        }
+                    );
+
+
+                locationStates =
+                    uniqueSortedStrings(
+                        (
+                            countryData &&
+                            Array.isArray(
+                                countryData.states
+                            )
+                        )
+                            ?
+                            countryData.states.map(
+                                function (state) {
+
+                                    if (
+                                        typeof state ===
+                                        "string"
+                                    ) {
+                                        return state;
+                                    }
+
+                                    return (
+                                        state.name ||
+                                        state.state_name ||
+                                        ""
+                                    );
+
+                                }
+                            )
+                            :
+                            []
+                    );
+
+
+                if (locationStates.length) {
+
+                    setLocationEnabled(
+                        "state",
+                        true,
+                        "Search state / province..."
+                    );
+
+                    setLocationEnabled(
+                        "city",
+                        false,
+                        "Select a state / province first"
+                    );
+
+                    setLocationHelp(
+                        "state",
+                        locationStates.length +
+                        " states / provinces available."
+                    );
+
+                    setLocationHelp(
+                        "city",
+                        "Cities load automatically after the state / province is selected."
+                    );
+
+                }
+                else {
+
+                    /*
+                    Some countries don't have state/province data in
+                    the API. State remains optional/manual and cities
+                    are loaded at country level.
+                    */
+
+                    setLocationEnabled(
+                        "state",
+                        true,
+                        "State / province (optional)"
+                    );
+
+                    setLocationHelp(
+                        "state",
+                        "No state / province list is published for this country. You may type it manually."
+                    );
+
+
+                    await loadCountryCities(
+                        selectedCountry
+                    );
+
+                }
+
+
+                setLocationHelp(
+                    "country",
+                    "Selected: " +
+                    selectedCountry
+                );
+
+                return;
+
+            }
+
+
+            if (type === "state") {
+
+                selectedState =
+                    cleanValue;
+
+                selectedCity =
+                    "";
+
+                locationCities =
+                    [];
+
+                locationElements.city.input.value =
+                    "";
+
+
+                await loadStateCities(
+                    selectedCountry,
+                    selectedState
+                );
+
+                return;
+
+            }
+
+
+            selectedCity =
+                cleanValue;
+
+            setLocationHelp(
+                "city",
+                "Selected: " +
+                selectedCity
+            );
+
+        }
+
+
+        /*
+        --------------------------------------------------------------
+        CITY API REQUESTS
+        --------------------------------------------------------------
+        */
+
+        async function loadStateCities(
+            country,
+            state
+        ) {
+
+            if (!country || !state) {
+
+                setLocationEnabled(
+                    "city",
+                    false,
+                    "Select a state / province first"
+                );
+
+                return;
+
+            }
+
+
+            setLocationEnabled(
+                "city",
+                false,
+                "Loading cities..."
+            );
+
+            setLocationHelp(
+                "city",
+                "Loading cities for " +
+                state +
+                "...",
+                "loading"
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        LOCATION_API_BASE +
+                        "/state/cities",
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    country:
+                                        country,
+
+                                    state:
+                                        state
+                                })
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "City API request failed."
+                    );
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    result.error ||
+                    !Array.isArray(
+                        result.data
+                    )
+                ) {
+
+                    throw new Error(
+                        result.msg ||
+                        "City data unavailable."
+                    );
+
+                }
+
+
+                locationCities =
+                    uniqueSortedStrings(
+                        result.data
+                    );
+
+
+                setLocationEnabled(
+                    "city",
+                    true,
+                    locationCities.length
+                        ?
+                        "Search city..."
+                        :
+                        "Type city manually"
+                );
+
+
+                setLocationHelp(
+                    "state",
+                    "Selected: " +
+                    state
+                );
+
+
+                setLocationHelp(
+                    "city",
+                    locationCities.length
+                        ?
+                        locationCities.length +
+                        " cities available."
+                        :
+                        "No city list returned. You may type the city manually."
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "City loading error:",
+                    error
+                );
+
+
+                locationCities =
+                    [];
+
+
+                setLocationEnabled(
+                    "city",
+                    true,
+                    "Type city manually"
+                );
+
+
+                setLocationHelp(
+                    "city",
+                    "City list could not be loaded. You can type the city manually.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        async function loadCountryCities(
+            country
+        ) {
+
+            if (!country) {
+                return;
+            }
+
+
+            setLocationEnabled(
+                "city",
+                false,
+                "Loading cities..."
+            );
+
+            setLocationHelp(
+                "city",
+                "Loading cities for " +
+                country +
+                "...",
+                "loading"
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        LOCATION_API_BASE +
+                        "/cities",
+                        {
+                            method:
+                                "POST",
+
+                            headers: {
+                                "Content-Type":
+                                    "application/json",
+                                "Accept":
+                                    "application/json"
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    country:
+                                        country
+                                })
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Country city API request failed."
+                    );
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    result.error ||
+                    !Array.isArray(
+                        result.data
+                    )
+                ) {
+
+                    throw new Error(
+                        result.msg ||
+                        "City data unavailable."
+                    );
+
+                }
+
+
+                locationCities =
+                    uniqueSortedStrings(
+                        result.data
+                    );
+
+
+                setLocationEnabled(
+                    "city",
+                    true,
+                    locationCities.length
+                        ?
+                        "Search city..."
+                        :
+                        "Type city manually"
+                );
+
+
+                setLocationHelp(
+                    "city",
+                    locationCities.length
+                        ?
+                        locationCities.length +
+                        " cities available."
+                        :
+                        "No city list returned. You may type the city manually."
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Country city loading error:",
+                    error
+                );
+
+
+                locationCities =
+                    [];
+
+
+                setLocationEnabled(
+                    "city",
+                    true,
+                    "Type city manually"
+                );
+
+
+                setLocationHelp(
+                    "city",
+                    "City list could not be loaded. You can type the city manually.",
+                    "error"
+                );
+
+            }
+
+        }
+
+
+        /*
+        --------------------------------------------------------------
+        LOAD COMPLETE COUNTRY / STATE DATA
+        --------------------------------------------------------------
+        */
+
+        async function initLocationSelectors() {
+
+            bindLocationSelector(
+                "country"
+            );
+
+            bindLocationSelector(
+                "state"
+            );
+
+            bindLocationSelector(
+                "city"
+            );
+
+
+            try {
+
+                const response =
+                    await fetch(
+                        LOCATION_API_BASE +
+                        "/states",
+                        {
+                            headers: {
+                                "Accept":
+                                    "application/json"
+                            },
+                            cache:
+                                "force-cache"
+                        }
+                    );
+
+
+                if (!response.ok) {
+                    throw new Error(
+                        "Location API request failed."
+                    );
+                }
+
+
+                const result =
+                    await response.json();
+
+
+                if (
+                    result.error ||
+                    !Array.isArray(
+                        result.data
+                    )
+                ) {
+
+                    throw new Error(
+                        result.msg ||
+                        "Country data unavailable."
+                    );
+
+                }
+
+
+                const byName =
+                    new Map();
+
+
+                result.data.forEach(
+                    function (country) {
+
+                        const name =
+                            String(
+                                country.name ||
+                                country.country ||
+                                ""
+                            ).trim();
+
+                        if (!name) {
+                            return;
+                        }
+
+
+                        byName.set(
+                            name,
+                            {
+                                name:
+                                    name,
+
+                                states:
+                                    Array.isArray(
+                                        country.states
+                                    )
+                                        ?
+                                        country.states
+                                        :
+                                        []
+                            }
+                        );
+
+                    }
+                );
+
+
+                locationCountries =
+                    Array.from(
+                        byName.values()
+                    )
+                        .sort(
+                            function (a, b) {
+
+                                return a.name.localeCompare(
+                                    b.name
+                                );
+
+                            }
+                        );
+
+
+                setLocationHelp(
+                    "country",
+                    locationCountries.length +
+                    " countries available. Start typing to search."
+                );
+
+
+                renderLocationDropdown(
+                    "country",
+                    ""
+                );
+
+            }
+            catch (error) {
+
+                console.error(
+                    "Country/state loading error:",
+                    error
+                );
+
+
+                locationCountries =
+                    [];
+
+
+                /*
+                Keep every field usable manually if the public
+                location service is temporarily down.
+                */
+
+                setLocationEnabled(
+                    "state",
+                    true,
+                    "Type state / province"
+                );
+
+                setLocationEnabled(
+                    "city",
+                    true,
+                    "Type city"
+                );
+
+
+                setLocationHelp(
+                    "country",
+                    "Location list could not be loaded. You can type the country manually.",
+                    "error"
+                );
+
+                setLocationHelp(
+                    "state",
+                    "Type the state / province manually."
+                );
+
+                setLocationHelp(
+                    "city",
+                    "Type the city manually."
+                );
+
+            }
+
+        }
+
+
+        /*
+        --------------------------------------------------------------
+        INPUT EVENTS
+        --------------------------------------------------------------
+        */
+
+        function bindLocationSelector(type) {
+
+            const part =
+                locationElements[type];
+
+
+            part.input.addEventListener(
+                "focus",
+                function () {
+
+                    openLocationDropdown(
+                        type
+                    );
+
+                }
+            );
+
+
+            part.input.addEventListener(
+                "input",
+                function () {
+
+                    /*
+                    Manual edits are allowed. Dependent selections
+                    reset whenever a parent location is changed.
+                    */
+
+                    if (type === "country") {
+
+                        selectedCountry =
+                            part.input.value.trim();
+
+                        selectedState =
+                            "";
+
+                        selectedCity =
+                            "";
+
+                        locationStates =
+                            [];
+
+                        locationCities =
+                            [];
+
+                        locationElements.state.input.value =
+                            "";
+
+                        locationElements.city.input.value =
+                            "";
+
+                        setLocationEnabled(
+                            "state",
+                            false,
+                            "Select a country first"
+                        );
+
+                        setLocationEnabled(
+                            "city",
+                            false,
+                            "Select a state / province first"
+                        );
+
+                    }
+
+
+                    if (type === "state") {
+
+                        selectedState =
+                            part.input.value.trim();
+
+                        selectedCity =
+                            "";
+
+                        locationCities =
+                            [];
+
+                        locationElements.city.input.value =
+                            "";
+
+                        setLocationEnabled(
+                            "city",
+                            false,
+                            "Select a state / province first"
+                        );
+
+                    }
+
+
+                    if (type === "city") {
+
+                        selectedCity =
+                            part.input.value.trim();
+
+                    }
+
+
+                    openLocationDropdown(
+                        type
+                    );
+
+                }
+            );
+
+
+            part.input.addEventListener(
+                "blur",
+                function () {
+
+                    /*
+                    If the user typed an exact known value instead of
+                    clicking the option, treat it as a selection.
+                    */
+
+                    const typed =
+                        part.input.value
+                            .trim();
+
+                    const exact =
+                        getLocationOptions(type)
+                            .find(
+                                function (option) {
+
+                                    return (
+                                        option.toLowerCase() ===
+                                        typed.toLowerCase()
+                                    );
+
+                                }
+                            );
+
+
+                    if (exact) {
+
+                        setTimeout(
+                            function () {
+
+                                selectLocation(
+                                    type,
+                                    exact
+                                );
+
+                            },
+                            80
+                        );
+
+                    }
+                    else {
+
+                        setTimeout(
+                            function () {
+
+                                closeLocationDropdown(
+                                    type
+                                );
+
+                            },
+                            120
+                        );
+
+                    }
+
+                }
+            );
+
+
+            part.toggle.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        part.dropdown.classList.contains(
+                            "show"
+                        )
+                    ) {
+
+                        closeLocationDropdown(
+                            type
+                        );
+
+                    }
+                    else {
+
+                        part.input.focus();
+
+                        openLocationDropdown(
+                            type
+                        );
+
+                    }
+
+                }
+            );
+
+        }
+
+
+        document.addEventListener(
+            "click",
+            function (event) {
+
+                if (
+                    !event.target.closest(
+                        ".location-combobox"
+                    )
+                ) {
+
+                    closeAllLocationDropdowns();
+
+                }
+
+            }
+        );
+
 
 
         /*
@@ -3718,6 +5230,8 @@
                             INITIAL
         ==============================================================
         */
+
+        initLocationSelectors();
 
         updateCredits();
 
